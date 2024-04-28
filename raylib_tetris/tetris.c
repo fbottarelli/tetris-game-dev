@@ -33,27 +33,20 @@ int main(void)
 
     typedef struct 
     {
-        int x;
-        int y;
+        int row;
+        int col;
     } tuple;
     // tetraminus piece
-  // Rectangle, 4 components
-    typedef struct {
-        tuple piece1;                // Rectangle top-left corner position x
-        tuple piece2;                // Rectangle top-left corner position y
-        tuple piece3;            // Rectangle width
-        tuple piece4;           // Rectangle height
-    } Tetraminus;
-
-
 
     // position of moving tetraminus
     // Vector2 tetraminosPosition = { tetraminosRadius/2, tetraminosRadius/2 };
     // Vector2 tetraminosPosition = { squareSide/2, squareSide/2 };
     Vector2 tetraminosPosition = { 0, 0 };
 
-    Tetraminus tetraO = {{0,4},{0,5},{1,4},{1,5}};
-    Tetraminus tetraI = {{0,4},{1,4},{2,4},{3,4}};
+    //  coordinate in i,j i row and j col
+    tuple tetraO[] = {{0,4},{0,5},{1,4},{1,5}};
+    tuple tetraI[] = {{0, 4}, {1, 4}, {2, 4}, {3, 4}};
+    int numberOfPieces=4;
 
     SetTargetFPS(200);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -75,6 +68,28 @@ int main(void)
         if (IsKeyPressed(KEY_DOWN) && tetraminosPosition.y < screenHeight - squareSide) { 
             tetraminosPosition.y += 40.0f;
             }
+
+        if (IsKeyPressed(KEY_RIGHT)) {
+            for (int k=0; k<numberOfPieces; k++) {
+                if (tetraI[k].col < (screenWidth/squareSide)-1) {
+                    tetraI[k].col = tetraI[k].col + 1;
+                }
+            }
+        }
+        if (IsKeyPressed(KEY_LEFT)) {
+            for (int k=0; k<numberOfPieces; k++) {
+                if (tetraI[k].col > 0) {
+                    tetraI[k].col = tetraI[k].col - 1;
+                }
+            }
+        }
+        if (IsKeyPressed(KEY_DOWN)) {
+            for (int k=0; k<numberOfPieces; k++) {
+                if (tetraI[k].row < (screenHeight/squareSide)-0) {
+                    tetraI[k].row = tetraI[k].row + 1;
+                }
+            }
+        }
         //--------------------------------------------------------------------------------
 
         // Draw
@@ -101,6 +116,12 @@ int main(void)
                         // draw a tetraminus
                         DrawRectangle(j*squareSide,i*squareSide,squareSide,squareSide,GREEN);
                     }
+                    for (int k=0; k<numberOfPieces; k++) {
+                        if ((i==tetraI[k].row) && (j==tetraI[k].col)) {
+                            DrawRectangle(j*squareSide,i*squareSide,squareSide,squareSide,RED);
+                        }
+                    }
+                    
                 }
             }
 
